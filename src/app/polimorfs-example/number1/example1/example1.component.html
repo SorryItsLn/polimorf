@@ -1,0 +1,11 @@
+<div class="flex justify-center">
+  <div class="flex gap-10">
+    <div>
+      <ng-container
+        *polymorpheusOutlet="content as primitive; context: context"
+      >
+        <div>{{ primitive }}</div>
+      </ng-container>
+    </div>
+  </div>
+</div>
