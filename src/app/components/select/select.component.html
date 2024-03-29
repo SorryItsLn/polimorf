@@ -53,13 +53,16 @@
         [emptyContent]="errorStatus ? errorStateTemplate : null"
       >
         <button
-          *ngFor="let option of optionsAvailable; last as isLast"
+          *ngFor="
+            let option of asyncSearch ? list$.value : optionsAvailable;
+            last as isLast
+          "
           tuiOption
           [value]="option"
         >
           {{ stringify(option) }}
 
-          <ng-container *ngIf="isLast && !isEmpty">
+          <ng-container *ngIf="isLast && !isEmpty && asyncSearch">
             @defer (on viewport) {
             <ma-ui-load-trigger (init)="loadTriggerEventHandler()" />
             } @placeholder {

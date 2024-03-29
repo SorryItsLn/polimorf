@@ -110,23 +110,10 @@ export class SelectComponent<T> extends FormControlWrapper implements OnInit {
   @Input() stringify: TuiStringHandler<T> = (item: T): string => {
     return String(item);
   };
-  @Input() handlerSearch!: selectHandlerSearch<T>;
+  @Input() handlerSearch?: selectHandlerSearch<T>;
 
   options$ = this.search$.pipe(
-    debounceTime(1000),
-    tap((res) => {
-      this.searchParams.page.next(1);
-      this.searchParams.query.next(res);
-      return this.handlerSearch(this.searchParams).subscribe((res: any) => {
-        console.log(res);
-        this.list$.next([...res.options]);
-        this.options = this.list$.value;
-        this.isEmpty = false;
-      });
-    }),
     switchMap((search) => {
-      console.log(search, 'asdkjads');
-
       return of(this.options).pipe(
         map((items) => {
           if (items === null) return items;
@@ -139,14 +126,21 @@ export class SelectComponent<T> extends FormControlWrapper implements OnInit {
     })
   );
 
-  options2$ = this.search$
+  optionss$ = this.search$
     .pipe(
+      debounceTime(1000),
       tap((res) => {
+        this.searchParams.page.next(1);
+        this.searchParams.query.next(res);
         if (this.handlerSearch) {
-          this.handlerSearch(this.searchParams).subscribe();
+          this.handlerSearch(this.searchParams).subscribe((res: any) => {
+            console.log(res);
+            this.list$.next([...res.options]);
+            this.options = this.list$.value;
+            this.isEmpty = false;
+          });
         }
-      }),
-      tap(() => {})
+      })
     )
     .subscribe();
 
@@ -165,8 +159,7 @@ export class SelectComponent<T> extends FormControlWrapper implements OnInit {
           map((res) => this.list$.next([...this.list$.value, ...res.options])),
           tap(() => {
             this.options = this.list$.value;
-            this.search$.next(this.search$.value),
-              this.searchParams.page.next(this.searchParams.page.value + 1);
+            this.searchParams.page.next(this.searchParams.page.value + 1);
             this.loading$.next(false);
           })
         )
