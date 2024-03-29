@@ -75,7 +75,7 @@ export class SelectComponent<T> extends FormControlWrapper implements OnInit {
   isEmpty = false;
   cdr = inject(ChangeDetectorRef);
   list$ = new BehaviorSubject<T[]>([]);
-  loading$ = new BehaviorSubject(true);
+  loading$ = new BehaviorSubject(false);
   errorStatus = false;
   options: null | T[] = null;
   search$ = new BehaviorSubject<null | string>(null);
@@ -128,15 +128,13 @@ export class SelectComponent<T> extends FormControlWrapper implements OnInit {
 
   optionss$ = this.search$
     .pipe(
-      debounceTime(1000),
+      debounceTime(800),
       tap((res) => {
-        this.searchParams.page.next(1);
-        this.searchParams.query.next(res);
-        if (this.handlerSearch) {
+        if (this.handlerSearch && this.asyncSearch) {
+          this.searchParams.page.next(1);
+          this.searchParams.query.next(res);
           this.handlerSearch(this.searchParams).subscribe((res: any) => {
-            console.log(res);
             this.list$.next([...res.options]);
-            this.options = this.list$.value;
             this.isEmpty = false;
           });
         }
@@ -176,7 +174,8 @@ export class SelectComponent<T> extends FormControlWrapper implements OnInit {
   @Input() disabledItemHandler: (item: T) => boolean = () => false;
   override ngOnInit() {
     super.ngOnInit();
-    this.appendList();
-    this.items;
+    if (this.handlerSearch) {
+      this.appendList();
+    }
   }
 }

@@ -31,6 +31,10 @@ export class AppComponent {
   ];
   readonly number = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+  stringify(product: any) {
+    return `${product.id}.  ${product.title}`;
+  }
+
   readonly context!: { $implicit: number };
   asyncSearch: selectHandlerSearch<any> = ({ page, capacity, query }) => {
     return this.http
