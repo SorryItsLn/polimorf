@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
-import { PolymorpheusContent } from '@tinkoff/ng-polymorpheus';
-import { ContextWithActive } from '../../types/interfaces';
+import { Component } from '@angular/core';
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',

@@ -14,16 +14,13 @@ import { AppComponent } from './app.component';
 import { Example1Component } from './polimorfs-example/number1/example1/example1.component';
 import { TabsComponent } from './components/tabs/tabs.component';
 import { CommonModule } from '@angular/common';
-import { PolymorpheusTemplate } from './polimorfs-example/number1/directives/template';
 import { PolymorpheusModule } from '@tinkoff/ng-polymorpheus';
+import { SelectComponent } from './components/select/select.component';
+import { TuiPortalModule } from '@taiga-ui/cdk';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    Example1Component,
-    TabsComponent,
-    PolymorpheusTemplate,
-  ],
+  declarations: [AppComponent, Example1Component, TabsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,9 +28,12 @@ import { PolymorpheusModule } from '@tinkoff/ng-polymorpheus';
     TuiRootModule,
     TuiDialogModule,
     TuiAlertModule,
+    TuiPortalModule,
     PolymorpheusModule,
+    SelectComponent,
+    HttpClientModule,
     CommonModule,
-
+    TuiRootModule,
     BrowserModule,
   ],
   providers: [{ provide: TUI_SANITIZER, useClass: NgDompurifySanitizer }],

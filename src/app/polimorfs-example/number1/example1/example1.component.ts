@@ -15,8 +15,6 @@ export class Example1Component<T> {
   content: PolymorpheusContent<unknown>;
 
   getContext($implicit: T) {
-    console.log($implicit);
-
     return { $implicit };
   }
 }

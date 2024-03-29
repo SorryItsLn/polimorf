@@ -1,0 +1,95 @@
+<ng-container *tuiLet="options$ | async as optionsAvailable">
+  <ng-container *ngIf="multiple; else singleSelect">
+    <tui-multi-select
+      [tuiTextfieldSize]="size"
+      (focusedChange)="search$.next(null)"
+      (searchChange)="search$.next($event)"
+      [formControl]="control"
+      [search]="search$ | async"
+      [stringify]="stringify"
+      [tuiTextfieldLabelOutside]="true"
+    >
+      <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>
+      <tui-data-list
+        *tuiDataList
+        tuiMultiSelectGroup
+        [emptyContent]="errorStatus ? errorStateTemplate : null"
+      >
+        <button
+          *ngFor="let option of optionsAvailable; last as isLast"
+          tuiOption
+          [value]="option"
+        >
+          {{ stringify(option) }}
+
+          <ng-container *ngIf="isLast && !isEmpty">
+            @defer (on viewport) {
+            <ma-ui-load-trigger (init)="loadTriggerEventHandler()" />
+            } @placeholder {
+            <div></div>
+            }
+          </ng-container>
+        </button>
+
+        <tui-loader *ngIf="loading$ | async"></tui-loader>
+      </tui-data-list>
+    </tui-multi-select>
+  </ng-container>
+
+  <ng-template #singleSelect>
+    <tui-combo-box
+      [tuiTextfieldSize]="size"
+      (focusedChange)="search$.next(null)"
+      (searchChange)="search$.next($event)"
+      [formControl]="control"
+      [search]="search$ | async"
+      [stringify]="stringify"
+      [valueContent]="defaultSelectedOptionTemplate"
+    >
+      <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>
+      <input tuiTextfield />
+      <tui-data-list
+        *tuiDataList
+        [emptyContent]="errorStatus ? errorStateTemplate : null"
+      >
+        <button
+          *ngFor="let option of optionsAvailable; last as isLast"
+          tuiOption
+          [value]="option"
+        >
+          {{ stringify(option) }}
+
+          <ng-container *ngIf="isLast && !isEmpty">
+            @defer (on viewport) {
+            <ma-ui-load-trigger (init)="loadTriggerEventHandler()" />
+            } @placeholder {
+            <div></div>
+            }
+          </ng-container>
+        </button>
+        <tui-loader *ngIf="loading$ | async"></tui-loader>
+      </tui-data-list>
+    </tui-combo-box>
+  </ng-template>
+</ng-container>
+
+<tui-error
+  [error]="[] | tuiFieldError | async"
+  [formControl]="control"
+></tui-error>
+
+<ng-template #defaultSelectedOptionTemplate let-selectedOption>
+  {{ stringify(selectedOption) }}
+</ng-template>
+
+<ng-template #defaultOptionTemplate let-option>
+  {{ stringify(option) }}
+</ng-template>
+
+<ng-template #errorStateTemplate>
+  There was an error during the request
+</ng-template>
+
+<ng-template #labelTemplate>
+  <ng-content></ng-content>
+</ng-template>

@@ -1,11 +1,8 @@
 <tui-root>
-  <div class="flex flex-col gap-10 justify-center mt-40">
-    <app-example1 [content]="items"></app-example1>
-    <app-example1 [content]="number"></app-example1>
-    <app-example1 [content]="template"></app-example1>
-    <app-example1 [content]="templateWithType"></app-example1>
-    <app-example1 class="mb-4" [content]="component"></app-example1>
-  </div>
+  <ma-ui-select
+    [handlerSearch]="asyncSearch"
+    [asyncSearch]="true"
+  ></ma-ui-select>
 </tui-root>
 
 <ng-template #template>
